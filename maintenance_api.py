@@ -10,5 +10,5 @@ class MaintenanceCommand(IntEnum):
 
 @dataclass
 class MaintenanceRequest:
-    command: MaintenanceCommand = MaintenanceCommand.Dummy
-    req_id: str = ""
+    command: MaintenanceCommand
+    req_id: str
