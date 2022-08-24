@@ -1,14 +1,44 @@
 from enum import IntEnum
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import List, Any, Optional
+from .utils import gen_unique_id
 
 
 class MaintenanceCommand(IntEnum):
     SuspendMemPool = 0,
     ResumeMemPool = 1,
+    ReplicateRequests = 2,
+    ReplicateTxsBunch = 3,
     Dummy = -1
 
 
 @dataclass
 class MaintenanceRequest:
-    command: MaintenanceCommand
-    req_id: str
+    command: MaintenanceCommand = field(default=MaintenanceCommand.Dummy)
+    req_id: str = field(default_factory=gen_unique_id)
+
+
+@dataclass
+class Peer:
+    def __init__(self, name: str, host: str, port: int):
+        self.name = name
+        self.address = host, int(port)
+
+
+@dataclass
+class ReplicationRequest(MaintenanceRequest):
+    peers: List[Peer] = field(default_factory=list)
+
+    def __post_init__(self):
+        self.command = MaintenanceCommand.ReplicateRequests
+
+
+@dataclass
+class ReplicationBunch(MaintenanceRequest):
+
+    sender_addr: Optional[str] = None
+    mp_tx_requests: Optional[List[Any]] = None
+
+    def __post_init__(self):
+        self.command = MaintenanceCommand.ReplicateTxsBunch
+
