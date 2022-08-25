@@ -20,9 +20,8 @@ class MaintenanceRequest:
 
 @dataclass
 class Peer:
-    def __init__(self, name: str, host: str, port: int):
-        self.name = name
-        self.address = host, int(port)
+    host: str
+    port: int
 
 
 @dataclass
