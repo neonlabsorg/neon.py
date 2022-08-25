@@ -1,6 +1,6 @@
 from enum import IntEnum
 from dataclasses import dataclass, field
-from typing import List, Any, Optional
+from typing import List, Any, Optional, Tuple
 from .utils import gen_unique_id
 
 
@@ -22,6 +22,10 @@ class MaintenanceRequest:
 class Peer:
     host: str
     port: int
+
+    @property
+    def address(self) -> Tuple[str, int]:
+        return self.host, self.port
 
 
 @dataclass
